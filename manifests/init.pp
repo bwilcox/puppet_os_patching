@@ -155,7 +155,15 @@ class os_patching (
 
   case $::kernel {
     'Linux': {
-      $fact_upload_cmd     = '/opt/puppetlabs/bin/puppet facts upload'
+      case $::osfamily {
+        'Archlinux': {
+          $puppet_bin = '/usr/local/bin'
+        }
+        default: {
+          $puppet_bin = '/opt/puppetlabs/bin'
+        }
+      }
+      $fact_upload_cmd     = "${puppet_bin}/puppet facts upload"
       $cache_dir           = '/var/cache/os_patching'
       $fact_dir            = '/usr/local/bin'
       $fact_file           = 'os_patching_fact_generation.sh'
