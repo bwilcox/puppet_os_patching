@@ -42,6 +42,11 @@ case $(facter osfamily) in
     SECPKGS=$(apt upgrade -s 2>/dev/null | awk '$1 == "Inst" && /security/ {print $2}')
     HELDPKGS=$(dpkg --get-selections | awk '$2 == "hold" {print $1}')
   ;;
+  Archlinux)
+    PKGS=$(pacman -Qu 2>/dev/null | awk '{print $1}')
+    SECPKGS=$(pacman -Qu 2>/dev/null | awk '{print $1}')
+    HELDPKGS=$(grep -e ^IgnorePkg 2>/dev/null | awk '{print $3}')
+  ;;
   *)
     rm $LOCKFILE
     exit 1
